@@ -9,10 +9,11 @@ using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using SmartStockAPI.Models;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 
 namespace SmartStockAPI.Controllers
 {
-    [Authorize] // ✅ Ensure JWT authentication is required
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
     [Route("api/[controller]")]
     [ApiController]
     public class InventoryApiController : ControllerBase
@@ -30,19 +31,26 @@ namespace SmartStockAPI.Controllers
 
         private string GetUserIdFromToken()
         {
-            return User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            _logger.LogInformation($"🔑 Extracted UserId from token: {userId}");
+            return userId;
         }
+
 
         [HttpGet]
         public async Task<ActionResult<object>> GetInventory()
         {
             var userId = GetUserIdFromToken();
+            _logger.LogInformation($"🔍 Extracted UserId: {userId}");
+
             if (string.IsNullOrEmpty(userId))
             {
                 return Unauthorized(new { success = false, message = "Invalid token or user not found." });
             }
 
             var inventory = await _context.Inventories.Where(i => i.UserId == userId).ToListAsync();
+            _logger.LogInformation($"📦 Inventory Count: {inventory.Count}");
+
             if (!inventory.Any())
             {
                 return NotFound(new { success = false, message = "No inventory items found." });
@@ -50,6 +58,7 @@ namespace SmartStockAPI.Controllers
 
             return Ok(new { success = true, message = "Inventory retrieved successfully.", totalItems = inventory.Count, inventory });
         }
+
 
         [HttpPost]
         public async Task<IActionResult> AddInventory([FromBody] Inventory inventoryItem)
