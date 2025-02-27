@@ -88,22 +88,52 @@ namespace SmartStockAPI.Controllers
 
         // ✅ FETCH USER DETAILS (Protected)
         [HttpGet("details/{email}")]
-        [Authorize] // ✅ Require authentication
         public async Task<IActionResult> GetUserDetails(string email)
         {
             var user = await _userManager.FindByEmailAsync(email);
-            if (user == null) return NotFound(new { Message = "User not found." });
 
-            // ✅ Fetch user roles
-            var roles = await _userManager.GetRolesAsync(user);
+            if (user == null)
+            {
+                return NotFound(new { message = "User not found" });
+            }
+
+            var userRoles = await _userManager.GetRolesAsync(user);
+
+            // ✅ Generate JWT Token for the user
+            var authClaims = new List<Claim>
+    {
+        new Claim(ClaimTypes.NameIdentifier, user.Id),
+        new Claim(ClaimTypes.Email, user.Email),
+        new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
+    };
+
+            foreach (var userRole in userRoles)
+            {
+                authClaims.Add(new Claim(ClaimTypes.Role, userRole));
+            }
+
+            var authSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["JwtSettings:Key"]));
+
+            var token = new JwtSecurityToken(
+                issuer: _configuration["JwtSettings:Issuer"],
+                audience: _configuration["JwtSettings:Audience"],
+                expires: DateTime.UtcNow.AddMinutes(Convert.ToDouble(_configuration["JwtSettings:ExpiryMinutes"])),
+                claims: authClaims,
+                signingCredentials: new SigningCredentials(authSigningKey, SecurityAlgorithms.HmacSha256)
+            );
+
+            var tokenString = new JwtSecurityTokenHandler().WriteToken(token);
 
             return Ok(new
             {
-                Email = user.Email,
-                UserName = user.UserName,
-                Role = roles.FirstOrDefault() ?? "User"
+                id = user.Id,
+                email = user.Email,
+                userName = user.UserName,
+                roles = userRoles,
+                token = tokenString
             });
         }
+
 
         // ✅ GET TOTAL NUMBER OF USERS (Protected)
         [HttpGet("count")]
