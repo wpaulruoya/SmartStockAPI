@@ -63,23 +63,28 @@ namespace SmartStockAPI.Controllers
         [HttpPost("login")]
         public async Task<IActionResult> Login([FromBody] LoginModel model)
         {
-            if (model == null) return BadRequest(new { Message = "Invalid request. Missing body." });
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
 
             var user = await _userManager.FindByEmailAsync(model.Email);
             if (user == null || !await _userManager.CheckPasswordAsync(user, model.Password))
-            {
-                return Unauthorized(new { Message = "Invalid email or password." });
-            }
+                return Unauthorized(new { message = "Invalid email or password" });
 
-            // ✅ Generate JWT Token
-            var token = await GenerateJwtToken(user);
+            // Get user claims and roles
+            var userRoles = await _userManager.GetRolesAsync(user);
 
-            return Ok(new AuthResponse
+            // Generate JWT token
+            var token = GenerateJwtToken(user);
+
+            return Ok(new
             {
-                Message = "Login successful.",
-                Token = token
+                token,
+                email = user.Email,
+                userName = user.UserName, // Include user's name
+                roles = userRoles
             });
         }
+
 
         // ✅ FETCH USER DETAILS (Protected)
         [HttpGet("details/{email}")]
