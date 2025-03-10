@@ -137,7 +137,7 @@ namespace SmartStockAPI.Controllers
 
         // ✅ GET TOTAL NUMBER OF USERS (Protected)
         [HttpGet("count")]
-        [Authorize(Roles = "Admin,SuperAdmin")] // ✅ Restrict to Admins
+        //[Authorize(Roles = "Admin,SuperAdmin")] // ✅ Restrict to Admins
         public IActionResult GetUserCount()
         {
             var userCount = _userManager.Users.Count();
