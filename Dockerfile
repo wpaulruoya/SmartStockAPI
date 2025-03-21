@@ -21,4 +21,4 @@ RUN dotnet publish -c Release -o /app/publish
 FROM base AS final
 WORKDIR /app
 COPY --from=build /app/publish .
-ENTRYPOINT ["dotnet", "SmartStockAPI.dll"]
+ENTRYPOINT ["dotnet", "SmartStockAPI.dll", "--urls", "http://+:5168"]
