@@ -109,15 +109,13 @@ using (var scope = app.Services.CreateScope())
 }
 
 // ✅ Middleware Pipeline
-if (app.Environment.IsDevelopment() || app.Environment.IsProduction())
+app.UseSwagger();
+app.UseSwaggerUI(options =>
 {
-    app.UseSwagger();
-    app.UseSwaggerUI(options =>
-    {
-        options.SwaggerEndpoint("/swagger/v1/swagger.json", "SmartStock API V1");
-        options.RoutePrefix = string.Empty; // Makes Swagger the default page
-    });
-}
+    options.SwaggerEndpoint("/swagger/v1/swagger.json", "SmartStock API V1");
+    options.RoutePrefix = string.Empty; // Makes Swagger the default page
+});
+
 
 
 
