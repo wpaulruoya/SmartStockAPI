@@ -8,7 +8,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
-using StockMaster.Models;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 
 namespace SmartStockAPI.Controllers
