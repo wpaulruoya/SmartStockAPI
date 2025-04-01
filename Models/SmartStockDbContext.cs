@@ -15,6 +15,11 @@ namespace SmartStockAPI.Models
         {
             base.OnModelCreating(builder);
 
+            // ✅ Define precision for Price column
+            builder.Entity<Inventory>()
+                .Property(i => i.Price)
+                .HasColumnType("decimal(18,2)");  // Fix precision issue
+
             // ✅ Set up foreign key relationship with Identity Users table
             builder.Entity<Inventory>()
                 .HasOne<IdentityUser>()
