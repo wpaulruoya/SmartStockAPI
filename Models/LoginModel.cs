@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace SmartStockAPI.Models
+namespace StockMaster.Models
 {
     public class LoginModel
     {

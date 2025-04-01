@@ -1,15 +1,19 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using StockMaster.Models;
 
-namespace SmartStockAPI.Models
+namespace StockMaster.Models
 {
     public class SmartStockDbContext : IdentityDbContext<IdentityUser>
     {
-        public SmartStockDbContext(DbContextOptions<SmartStockDbContext> options) : base(options) { }
+        public SmartStockDbContext(DbContextOptions<SmartStockDbContext> options) : base(options)
+        {
+        }
 
         // ✅ Add Inventory Table
         public DbSet<Inventory> Inventories { get; set; }
+
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
@@ -27,5 +31,6 @@ namespace SmartStockAPI.Models
                 .HasForeignKey(i => i.UserId)
                 .OnDelete(DeleteBehavior.Cascade);
         }
+
     }
 }

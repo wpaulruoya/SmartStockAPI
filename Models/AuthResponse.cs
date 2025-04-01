@@ -1,4 +1,4 @@
-﻿namespace SmartStockAPI.Models
+﻿namespace StockMaster.Models
 {
     public class AuthResponse
     {

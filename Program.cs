@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
-using SmartStockAPI.Models;
+using StockMaster.Models;
 using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -112,14 +112,9 @@ using (var scope = app.Services.CreateScope())
 app.UseSwagger();
 app.UseSwaggerUI(options =>
 {
-    options.SwaggerEndpoint("/swagger/v1/swagger.json", "SmartStock API V1");
+    options.SwaggerEndpoint("/swagger/v1/swagger.json", "StockMaster API V1");
     options.RoutePrefix = string.Empty; // Makes Swagger the default page
 });
-
-
-
-
-
 
 app.UseHttpsRedirection();
 app.UseCors("AllowFrontend");
