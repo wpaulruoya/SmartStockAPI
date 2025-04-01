@@ -3,12 +3,12 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
-using SmartStockAPI.Models; // ✅ Ensure this exists if you're using models
+using StockMaster.Models;
 using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
-using SmartStockAPI.Models;
+using StockMaster.Models;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 
 namespace SmartStockAPI.Controllers

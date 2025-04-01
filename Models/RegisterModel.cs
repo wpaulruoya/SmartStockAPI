@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace SmartStockAPI.Models
-{
+namespace StockMaster.Models
+{ 
     public class RegisterModel
     {
         [Required(ErrorMessage = "Email is required.")]

@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.IdentityModel.Tokens;
 using System.Threading.Tasks;
-using SmartStockAPI.Models;
+using StockMaster.Models;
 using System;
 using System.Linq;
 using System.Collections.Generic;
