@@ -102,11 +102,11 @@ builder.Services.AddSwaggerGen(options =>
 var app = builder.Build();
 
 // ✅ Apply Database Migrations Automatically
-using (var scope = app.Services.CreateScope())
-{
-    var dbContext = scope.ServiceProvider.GetRequiredService<SmartStockDbContext>();
-    dbContext.Database.Migrate();
-}
+//using (var scope = app.Services.CreateScope())
+//{
+//    var dbContext = scope.ServiceProvider.GetRequiredService<SmartStockDbContext>();
+//    dbContext.Database.Migrate();
+//}
 
 // ✅ Middleware Pipeline
 app.UseSwagger();
@@ -116,7 +116,10 @@ app.UseSwaggerUI(options =>
     options.RoutePrefix = string.Empty; // Makes Swagger the default page
 });
 
-app.UseHttpsRedirection();
+app.Urls.Add("http://*:5168");
+//app.Urls.Add("https://*:7122");
+
+//app.UseHttpsRedirection();
 app.UseCors("AllowFrontend");
 app.UseAuthentication();
 app.UseAuthorization();
